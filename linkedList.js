@@ -7,7 +7,6 @@ class Node {
 
 const LinkedList = () => {
 	let head = null;
-	let size = 0;
 
 	const append = (value) => {
 		let newNode = new Node(value);
@@ -21,13 +20,22 @@ const LinkedList = () => {
 			}
 			pointer.nextNode = newNode;
 		}
-		size++;
+	};
+
+	const size = () => {
+		let counter = 0;
+		let pointer = head;
+		while (pointer.nextNode !== null) {
+			counter++;
+			pointer = pointer.nextNode;
+		}
+		counter++;
+		return counter;
 	};
 
 	const prepend = (value) => {
 		let newNode = new Node(value, head);
 		let head = newNode;
-		size++;
 	};
 
 	const at = (index) => {
@@ -86,16 +94,45 @@ const LinkedList = () => {
 		let pointer = head;
 		let string = "";
 		while (pointer.nextNode !== null) {
-			string += " " + pointer.value;
+			string += `( ${pointer.value} ) => `;
 			pointer = pointer.nextNode;
 		}
 		string += " " + pointer.value;
 		return string;
 	};
 
-	const insertAt = (value, index) => {};
+	const insertAt = (value, index) => {
+		if (index === 0) {
+			prepend(value);
+			return;
+		}
+		const prevNode = at(index - 1);
+		const newNode = new Node(value, prevNode.newNode);
+		prevNode.newNode = newNode;
+	};
 
-	return { append, prepend, at, tail, pop, contains, find, toString };
+	const removeAt = (index) => {
+		if (index === 0) {
+			head = head.nextNode;
+			return;
+		}
+		const prevNode = at(index - 1);
+		prevNode.nextNode = prevNode.nextNode.nextNode;
+	};
+
+	return {
+		append,
+		prepend,
+		size,
+		at,
+		tail,
+		pop,
+		contains,
+		find,
+		toString,
+		insertAt,
+		removeAt,
+	};
 };
 
 let list = LinkedList();
@@ -113,3 +150,4 @@ console.log(list.at(3));
 console.log(list.contains(3));
 console.log(list.find(3));
 console.log(list.toString());
+console.log(list.size());
